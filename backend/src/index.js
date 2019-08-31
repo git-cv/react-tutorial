@@ -22,8 +22,6 @@ app.use(helmet());
 // use bodyParser to parse application/json content-type
 app.use(bodyParser.json());
 
-app.use('/.netlify/functions/server', router);  // route to lambda
-app.handler = serverless(app);
 
 // enable all CORS requests
 app.use(cors());
@@ -41,6 +39,9 @@ app.use(morgan('combined'));
 //   }));
 //   res.send(qs);
 // });
+
+app.get('/.netlify/functions/server', router);  // route to lambda
+app.handler = serverless(app);
 
 // get a specific question
 app.get('/:id', (req, res) => {
