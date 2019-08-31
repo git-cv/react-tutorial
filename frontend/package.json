@@ -9,11 +9,16 @@
     "react-dom": "^16.6.0",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "2.1.1"
+    "react-scripts": "2.1.1",
+    "netlify-lambda": "^0.4.0",
+    "serverless-http": "^1.6.0"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "run-p build:**",
+    "build:app": "react-scripts build",
+    "build:lambda": "netlify-lambda build src/lambda",
+    "serve:lambda": "netlify-lambda serve src/lambda",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
