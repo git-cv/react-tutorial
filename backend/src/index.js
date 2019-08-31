@@ -7,6 +7,9 @@ const morgan = require('morgan');
 const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
 
+const serverless = require('serverless-http');
+const router = express.Router();
+
 // define the Express app
 const app = express();
 
@@ -18,6 +21,9 @@ app.use(helmet());
 
 // use bodyParser to parse application/json content-type
 app.use(bodyParser.json());
+
+app.use('/.netlify/functions/server', router);  // route to lambda
+app.handler = serverless(app);
 
 // enable all CORS requests
 app.use(cors());
@@ -60,7 +66,7 @@ const checkJwt = jwt({
 
 // insert a new question
 app.post('/', checkJwt, (req, res) => {
-  const {title, description} = req.body;
+  const { title, description } = req.body;
   const newQuestion = {
     id: questions.length + 1,
     title,
@@ -74,7 +80,7 @@ app.post('/', checkJwt, (req, res) => {
 
 // insert a new answer to a question
 app.post('/answer/:id', checkJwt, (req, res) => {
-  const {answer} = req.body;
+  const { answer } = req.body;
 
   const question = questions.filter(q => (q.id === parseInt(req.params.id)));
   if (question.length > 1) return res.status(500).send();
